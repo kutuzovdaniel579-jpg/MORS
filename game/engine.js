@@ -10,7 +10,7 @@ let player = {
     angle: 0,
     speed: 0.06,
     rotSpeed: 0.04,
-    fov: Math.PI / 3   // 60° FOV, DOOM‑style
+    fov: Math.PI / 2   // 90° FOV
 };
 
 
