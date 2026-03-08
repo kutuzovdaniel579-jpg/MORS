@@ -9,8 +9,10 @@ let player = {
     z: 2.5,
     angle: 0,
     speed: 0.06,
-    rotSpeed: 0.04
+    rotSpeed: 0.04,
+    fov: Math.PI / 3   // 60° FOV, DOOM‑style
 };
+
 
 let keys = {};
 
@@ -65,7 +67,7 @@ function render() {
     ctx.fillStyle = "#222";
     ctx.fillRect(0, canvas.height / 2, canvas.width, canvas.height / 2);
 
-    let fov = Math.PI / 3;
+    let fov = player.fov;
     let numRays = canvas.width;
     let halfH = canvas.height / 2;
 
