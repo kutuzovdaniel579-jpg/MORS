@@ -5,10 +5,10 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let player = {
-    x: 3.5,
-    z: 3.5,
+    x: 2.5,
+    z: 2.5,
     angle: 0,
-    speed: 0.05,
+    speed: 0.06,
     rotSpeed: 0.04
 };
 
@@ -16,6 +16,16 @@ let keys = {};
 
 document.addEventListener("keydown", e => keys[e.key] = true);
 document.addEventListener("keyup", e => keys[e.key] = false);
+
+function tryMove(dx, dz) {
+    let nx = player.x + dx;
+    let nz = player.z + dz;
+
+    if (MAP[Math.floor(nz)][Math.floor(nx)] === 0) {
+        player.x = nx;
+        player.z = nz;
+    }
+}
 
 function updatePlayer() {
     if (keys["ArrowLeft"]) player.angle -= player.rotSpeed;
@@ -27,19 +37,8 @@ function updatePlayer() {
     if (keys["ArrowUp"]) tryMove(dx, dz);
     if (keys["ArrowDown"]) tryMove(-dx, -dz);
 
-    // strafe
     if (keys["a"]) tryMove(-dz, dx);
     if (keys["d"]) tryMove(dz, -dx);
-}
-
-function tryMove(dx, dz) {
-    let nx = player.x + dx;
-    let nz = player.z + dz;
-
-    if (MAP[Math.floor(nz)][Math.floor(nx)] === 0) {
-        player.x = nx;
-        player.z = nz;
-    }
 }
 
 function castRay(angle) {
@@ -58,8 +57,13 @@ function castRay(angle) {
 }
 
 function render() {
-    ctx.fillStyle = "#000";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // sky
+    ctx.fillStyle = "#111";
+    ctx.fillRect(0, 0, canvas.width, canvas.height / 2);
+
+    // floor
+    ctx.fillStyle = "#222";
+    ctx.fillRect(0, canvas.height / 2, canvas.width, canvas.height / 2);
 
     let fov = Math.PI / 3;
     let numRays = canvas.width;
@@ -71,7 +75,9 @@ function render() {
 
         let wallHeight = (1 / dist) * 600;
 
-        ctx.fillStyle = `rgb(${200 / dist}, 0, 0)`;
+        let shade = Math.min(255, 400 / dist);
+        ctx.fillStyle = `rgb(${shade}, ${shade/4}, ${shade/4})`;
+
         ctx.fillRect(i, halfH - wallHeight/2, 1, wallHeight);
     }
 }
